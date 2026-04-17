@@ -1,0 +1,47 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local environment & config
+.env
+.env.*
+*.env
+.python-version
+
+# Build artifacts
+*.log
+*.sqlite3
+dist/
+build/
+*.egg-info/
+
+# Tests & docs
+tests/
+docs/
+
+# Git / editor
+.git/
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node/npm (if present in monorepo)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Docker
+Dockerfile
+.dockerignore
