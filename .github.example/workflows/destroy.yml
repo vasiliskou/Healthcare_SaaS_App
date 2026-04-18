@@ -1,0 +1,44 @@
+name: Destroy
+
+on:
+  workflow_dispatch:    # manual trigger only
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      ENVIRONMENT: dev
+      PROJECT_NAME: consultation-app
+      AWS_REGION: eu-west-3
+      IMAGE_TAG: latest
+      AUTO_APPROVE: "true"          # skip prompt in CI
+      FORCE_DELETE_IMAGES: "true"   # empties ECR repo before destroy
+
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      CLERK_JWKS_URL: ${{ secrets.CLERK_JWKS_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.7
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # or OIDC role as before
+
+      - name: Destroy infrastructure
+        run: bash ./scripts/destroy.sh
